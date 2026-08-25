@@ -5,3 +5,6 @@ __pycache__/
 data/*.db
 .streamlit/
 .DS_Store
+
+# Local project notes, not part of the app
+NOTES.md
