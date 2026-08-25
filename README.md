@@ -1,4 +1,4 @@
-#Wikipedia Scraper Dashboard
+## Wikipedia Scraper Dashboard
 
 A Streamlit app that scrapes structured data straight out of any
 Wikipedia article — no CSS selectors or command-line flags needed,

@@ -5,3 +5,6 @@ __pycache__/
 data/*.db
 .streamlit/
 .DS_Store
+
+# Project instructions for Claude, not part of the app
+CLAUDE.md
