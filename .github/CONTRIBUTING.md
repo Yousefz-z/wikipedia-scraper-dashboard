@@ -45,7 +45,7 @@ Create a branch off `main` named for the kind of change you're making:
      minimum-safe version.
    - Handle expected failure cases explicitly rather than catching broad
      exceptions and surfacing raw error text to the user.
-4. Test your change manually by running the dashboard end to end.
+4. Test your change manually by running the dashboard.
 5. Commit with a clear message describing what changed and why.
 6. Open a pull request against `main` using the pull request template — fill
    it out completely, including how you tested the change.
