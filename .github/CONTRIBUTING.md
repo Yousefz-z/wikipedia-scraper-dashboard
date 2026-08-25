@@ -10,13 +10,12 @@ issue first describing what you'd like to change and why. This avoids
 duplicated effort and lets us agree on the approach before you spend time
 writing code.
 
-- Found a bug? [Open a bug report](ISSUE_TEMPLATE/bug_report.md).
-- Have an idea? [Open a feature request](ISSUE_TEMPLATE/feature_request.md).
+Found a bug or have an idea? [Open a new issue](https://github.com/Yousefz-z/wikipedia-scraper-dashboard/issues/new/choose) — you'll be prompted to pick a Bug Report or Feature Request form.
 
 ## Development setup
 
 ```bash
-git clone https://github.com/<your-fork>/wikipedia-scraper-dashboard.git
+git clone https://github.com/<your-fork-username>/wikipedia-scraper-dashboard.git
 cd wikipedia-scraper-dashboard
 python -m venv venv
 source venv/bin/activate  # on Windows: venv\Scripts\activate
