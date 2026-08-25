@@ -9,3 +9,5 @@ data/*.db
 # Project instructions for Claude, not part of the app
 CLAUDE.md
 _to_delete/
+.mypy_cache/
+.ruff_cache/
