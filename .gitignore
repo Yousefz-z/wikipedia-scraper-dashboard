@@ -8,3 +8,6 @@ data/*.db
 
 # Local project notes, not part of the app
 NOTES.md
+_to_delete/
+.mypy_cache/
+.ruff_cache/

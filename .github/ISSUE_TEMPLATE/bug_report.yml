@@ -1,0 +1,71 @@
+name: Bug report
+description: Report something that isn't working as expected
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear description of what's wrong.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to '...'
+        2. Enter '...'
+        3. Click '...'
+        4. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen instead?
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Extraction mode
+      description: Which mode were you using, if relevant?
+      options:
+        - Tables
+        - Infobox
+        - Headings
+        - Not applicable
+    validations:
+      required: false
+  - type: input
+    id: url
+    attributes:
+      label: Wikipedia URL
+      description: The article URL you were scraping, if relevant
+      placeholder: https://en.wikipedia.org/wiki/Albert_Einstein
+    validations:
+      required: false
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      placeholder: e.g. macOS 14
+    validations:
+      required: false
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: e.g. 3.11
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, logs, or anything else worth knowing.
+    validations:
+      required: false
