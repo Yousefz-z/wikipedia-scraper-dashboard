@@ -10,8 +10,8 @@ issue first describing what you'd like to change and why. This avoids
 duplicated effort and lets us agree on the approach before you spend time
 writing code.
 
-- Found a bug? [Open a bug report](.github/ISSUE_TEMPLATE/bug_report.md).
-- Have an idea? [Open a feature request](.github/ISSUE_TEMPLATE/feature_request.md).
+- Found a bug? [Open a bug report](ISSUE_TEMPLATE/bug_report.md).
+- Have an idea? [Open a feature request](ISSUE_TEMPLATE/feature_request.md).
 
 ## Development setup
 
