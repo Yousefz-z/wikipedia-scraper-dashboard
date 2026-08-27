@@ -5,8 +5,10 @@ browse whatever comes back.
 
 Run with:  streamlit run dashboard.py
 """
+import re
 from urllib.parse import urlparse
 
+import requests
 import streamlit as st
 
 from database import DB_PATH, get_dataframe, init_db, insert_items
@@ -53,8 +55,26 @@ if st.button("Scrape Wikipedia page", type="primary"):
                 st.rerun()
             else:
                 st.warning("The scraper did not find any usable data rows on that page.")
-        except Exception as exc:
-            st.error(f"Scraping failed: {exc}")
+        except requests.Timeout:
+            st.error(
+                "Wikipedia took longer than 10 seconds to respond. "
+                "Check your connection and try again."
+            )
+        except requests.HTTPError as exc:
+            status = exc.response.status_code if exc.response is not None else "an error"
+            st.error(
+                f"Wikipedia returned HTTP {status} for that URL. "
+                "Check that the article exists and the address is spelled correctly."
+            )
+        except requests.ConnectionError:
+            st.error("Could not reach Wikipedia. Check your internet connection and try again.")
+        except requests.RequestException as exc:
+            st.error(f"The request to Wikipedia could not be completed: {exc}")
+        except re.error as exc:
+            st.error(
+                f"That heading regular expression is not valid ({exc}). "
+                "Try a plain word such as History, or escape any special characters."
+            )
 
 df = get_dataframe(DB_PATH)
 
