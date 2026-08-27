@@ -123,11 +123,16 @@ def scrape_article_text(soup: BeautifulSoup, source_url: str, scraped_at: str) -
 def auto_scrape(
     url: str, mode: str = "Tables", heading_pattern: str | None = None,
 ) -> list[dict]:
-    """Extract Wikipedia tables, infoboxes, heading-filtered lists, or article text."""
+    """Extract Wikipedia tables, infoboxes, heading-filtered lists, or article text.
+
+    Raises:
+        requests.HTTPError: the page responded with a non-200 status.
+        requests.Timeout: the request took longer than the 10 second limit.
+        requests.ConnectionError: the page could not be reached at all.
+        re.error: heading_pattern is not a valid regular expression.
+    """
     resp = requests.get(url, headers=HEADERS, timeout=10)
-    if resp.status_code != 200:
-        print(f"Could not fetch {url} (status {resp.status_code})")
-        return []
+    resp.raise_for_status()
 
     scraped_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
     soup = BeautifulSoup(resp.content, "html.parser")
