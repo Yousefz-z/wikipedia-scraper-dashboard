@@ -1,5 +1,5 @@
-requests
-beautifulsoup4
-pandas
-streamlit
-lxml
+requests==2.34.2
+beautifulsoup4==4.15.0
+pandas==3.0.5
+streamlit==1.62.0
+lxml==6.1.2
