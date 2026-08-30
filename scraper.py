@@ -2,9 +2,10 @@
 
 This is a library, not a CLI — dashboard.py is the only entry point.
 """
+
 import io
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pandas as pd
 import requests
@@ -52,7 +53,11 @@ def extract_field(item, spec: str):
 
 
 def parse_page(
-    html: str | bytes, item_selector: str, fields: dict, source_url: str, scraped_at: str,
+    html: str | bytes,
+    item_selector: str,
+    fields: dict,
+    source_url: str,
+    scraped_at: str,
     heading_pattern: str | None = None,
 ) -> list[dict]:
     # Pass bytes rather than decoded text where possible — BeautifulSoup's
@@ -107,7 +112,11 @@ def scrape_infobox(soup: BeautifulSoup, source_url: str, scraped_at: str) -> lis
 
 def scrape_article_text(soup: BeautifulSoup, source_url: str, scraped_at: str) -> list[dict]:
     """Extract article paragraphs when structured Wikipedia data is unavailable."""
-    content = soup.select_one("#mw-content-text") or soup.select_one(".mw-parser-output") or soup.select_one("main")
+    content = (
+        soup.select_one("#mw-content-text")
+        or soup.select_one(".mw-parser-output")
+        or soup.select_one("main")
+    )
     if content is None:
         return []
 
@@ -121,7 +130,9 @@ def scrape_article_text(soup: BeautifulSoup, source_url: str, scraped_at: str) -
 
 
 def auto_scrape(
-    url: str, mode: str = "Tables", heading_pattern: str | None = None,
+    url: str,
+    mode: str = "Tables",
+    heading_pattern: str | None = None,
 ) -> list[dict]:
     """Extract Wikipedia tables, infoboxes, heading-filtered lists, or article text.
 
@@ -134,7 +145,7 @@ def auto_scrape(
     resp = requests.get(url, headers=HEADERS, timeout=10)
     resp.raise_for_status()
 
-    scraped_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    scraped_at = datetime.now(UTC).isoformat(timespec="seconds")
     soup = BeautifulSoup(resp.content, "html.parser")
 
     if mode == "Headings":
@@ -167,7 +178,9 @@ def auto_scrape(
                     row[key] = _maybe_number(value)
             row["source_url"] = url
             row["scraped_at"] = scraped_at
-        print(f"Extracted Wikipedia wikitable with {len(rows)} rows. Columns: {list(biggest.columns)}")
+        print(
+            f"Extracted Wikipedia wikitable with {len(rows)} rows. Columns: {list(biggest.columns)}"
+        )
         return rows
 
     print("No Wikipedia wikitables found; trying the article infobox and text.")
