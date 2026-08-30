@@ -5,6 +5,7 @@ browse whatever comes back.
 
 Run with:  streamlit run dashboard.py
 """
+
 import re
 from urllib.parse import urlparse
 
@@ -41,7 +42,9 @@ if st.button("Scrape Wikipedia page", type="primary"):
         parsed_url.hostname == "wikipedia.org"
         or (parsed_url.hostname or "").endswith(".wikipedia.org")
     ):
-        st.error("Enter a valid Wikipedia URL, such as https://en.wikipedia.org/wiki/Albert_Einstein.")
+        st.error(
+            "Enter a valid Wikipedia URL, such as https://en.wikipedia.org/wiki/Albert_Einstein."
+        )
     elif mode == "Headings" and not heading_pattern:
         st.warning("Enter a heading regular expression before scraping list items.")
     else:

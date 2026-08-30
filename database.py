@@ -4,6 +4,7 @@ Fields vary by site, so rows are stored as JSON rather than fixed
 columns — that's the one thing that has to change to support arbitrary
 sites without a schema migration every time.
 """
+
 import json
 import sqlite3
 from pathlib import Path
