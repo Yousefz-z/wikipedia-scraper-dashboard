@@ -19,11 +19,17 @@ git clone https://github.com/<your-fork-username>/wikipedia-scraper-dashboard.gi
 cd wikipedia-scraper-dashboard
 python -m venv venv
 source venv/bin/activate  # on Windows: venv\Scripts\activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
+pip install --group dev
 streamlit run dashboard.py
 ```
 
 The app opens at `http://localhost:8501`.
+
+`pip install --group dev` installs the linting and type checking tools at the
+same versions CI uses, pinned in `pyproject.toml`. It needs pip 25.1 or newer,
+which is why the setup upgrades pip first.
 
 ## Branching
 
@@ -46,8 +52,18 @@ Create a branch off `main` named for the kind of change you're making:
    - Handle expected failure cases explicitly rather than catching broad
      exceptions and surfacing raw error text to the user.
 4. Test your change manually by running the dashboard.
-5. Commit with a clear message describing what changed and why.
-6. Open a pull request against `main` using the pull request template — fill
+5. Run the same checks CI runs, and make sure all three pass:
+
+   ```bash
+   ruff check .
+   ruff format --check .
+   mypy dashboard.py scraper.py database.py
+   ```
+
+   `ruff format .` will fix formatting for you, and `ruff check --fix .` will
+   fix the lint errors it knows how to fix.
+6. Commit with a clear message describing what changed and why.
+7. Open a pull request against `main` using the pull request template — fill
    it out completely, including how you tested the change.
 
 ## Pull request review
