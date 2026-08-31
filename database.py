@@ -7,6 +7,7 @@ sites without a schema migration every time.
 
 import json
 import sqlite3
+from contextlib import closing
 from pathlib import Path
 
 import pandas as pd
@@ -17,19 +18,17 @@ DB_PATH = "data/scraped.db"
 def init_db(db_path: str = DB_PATH) -> None:
     """Create the items table if it doesn't exist yet."""
     Path(db_path).parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(db_path)
-    conn.execute(
-        """
-        CREATE TABLE IF NOT EXISTS items (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            source_url TEXT NOT NULL,
-            scraped_at TEXT NOT NULL,
-            data TEXT NOT NULL
+    with closing(sqlite3.connect(db_path)) as conn, conn:
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS items (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                source_url TEXT NOT NULL,
+                scraped_at TEXT NOT NULL,
+                data TEXT NOT NULL
+            )
+            """
         )
-        """
-    )
-    conn.commit()
-    conn.close()
 
 
 def insert_items(db_path: str, rows: list[dict]) -> None:
@@ -37,20 +36,23 @@ def insert_items(db_path: str, rows: list[dict]) -> None:
     everything else is stored as JSON."""
     if not rows:
         return
-    conn = sqlite3.connect(db_path)
-    conn.executemany(
-        "INSERT INTO items (source_url, scraped_at, data) VALUES (?, ?, ?)",
-        [
-            (
-                row["source_url"],
-                row["scraped_at"],
-                json.dumps({k: v for k, v in row.items() if k not in ("source_url", "scraped_at")}),
-            )
-            for row in rows
-        ],
-    )
-    conn.commit()
-    conn.close()
+
+    # Built before the connection is opened, so a row missing source_url or
+    # scraped_at fails before any database resource is acquired.
+    params = [
+        (
+            row["source_url"],
+            row["scraped_at"],
+            json.dumps({k: v for k, v in row.items() if k not in ("source_url", "scraped_at")}),
+        )
+        for row in rows
+    ]
+
+    with closing(sqlite3.connect(db_path)) as conn, conn:
+        conn.executemany(
+            "INSERT INTO items (source_url, scraped_at, data) VALUES (?, ?, ?)",
+            params,
+        )
 
 
 def get_dataframe(db_path: str = DB_PATH) -> pd.DataFrame:
@@ -58,9 +60,8 @@ def get_dataframe(db_path: str = DB_PATH) -> pd.DataFrame:
     expanded into regular columns so the dashboard can chart it."""
     if not Path(db_path).exists():
         return pd.DataFrame()
-    conn = sqlite3.connect(db_path)
-    raw = pd.read_sql_query("SELECT source_url, scraped_at, data FROM items", conn)
-    conn.close()
+    with closing(sqlite3.connect(db_path)) as conn:
+        raw = pd.read_sql_query("SELECT source_url, scraped_at, data FROM items", conn)
     if raw.empty:
         return raw
     fields = pd.json_normalize(raw["data"].apply(json.loads))
