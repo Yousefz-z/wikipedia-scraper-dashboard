@@ -32,4 +32,4 @@ jobs:
         run: ruff format --check .
 
       - name: Type check with mypy
-        run: mypy dashboard.py scraper.py database.py
+        run: mypy .
