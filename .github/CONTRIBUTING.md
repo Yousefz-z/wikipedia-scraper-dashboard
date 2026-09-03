@@ -22,7 +22,7 @@ source venv/bin/activate  # on Windows: venv\Scripts\activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 pip install --group dev
-streamlit run dashboard.py
+streamlit run app.py
 ```
 
 The app opens at `http://localhost:8501`.
@@ -57,7 +57,7 @@ Create a branch off `main` named for the kind of change you're making:
    ```bash
    ruff check .
    ruff format --check .
-   mypy dashboard.py scraper.py database.py
+   mypy .
    ```
 
    `ruff format .` will fix formatting for you, and `ruff check --fix .` will

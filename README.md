@@ -8,14 +8,17 @@ directly.
 ## How it works
 
 ```
-dashboard.py (Streamlit UI) ──▶ scraper.py (extraction) ──▶ data/scraped.db (SQLite)
+app.py + views/ (Streamlit UI) ──▶ scraper.py (extraction) ──▶ data/scraped.db (SQLite)
 ```
 
-- **`dashboard.py`** — the only entry point. Enter an article URL, pick
-  a mode, hit scrape, browse the results as a table.
-- **`scraper.py`** — a small library with one function per extraction
-  mode. No CLI; the dashboard calls it directly.
-- **`database.py`** — stores each row's fields as JSON (since fields
+- **`app.py`**: the only entry point. Sets the page configuration and
+  the navigation between views.
+- **`views/`**: one module per view, each exposing a `render` function.
+  `dashboard.py` is the scrape and browse screen. `articles.py` and
+  `settings.py` are placeholders for views that are not built yet.
+- **`scraper.py`**: a small library with one function per extraction
+  mode. No CLI; the dashboard view calls it directly.
+- **`database.py`**: stores each row's fields as JSON (since fields
   differ by mode and by article) and flattens them back into a table
   for display.
 
@@ -30,7 +33,7 @@ pip install -r requirements.txt
 ## Usage
 
 ```bash
-streamlit run dashboard.py
+streamlit run app.py
 ```
 
 Opens at `http://localhost:8501`. Paste a Wikipedia article URL, choose
@@ -61,9 +64,13 @@ match.
 
 ```
 web-scraper-dashboard/
-├── dashboard.py    # Streamlit UI — the entry point
-├── scraper.py       # extraction logic (Tables / Infobox / Headings)
-├── database.py       # SQLite read/write helpers
+├── app.py             # entry point: page config and view navigation
+├── views/
+│   ├── dashboard.py   # scrape and browse screen
+│   ├── articles.py    # index of scraped articles (not built yet)
+│   └── settings.py    # settings (not built yet)
+├── scraper.py         # extraction logic (Tables / Infobox / Headings)
+├── database.py        # SQLite read/write helpers
 ├── requirements.txt
 ├── data/              # SQLite DB lives here (gitignored)
 └── README.md

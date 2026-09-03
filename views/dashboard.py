@@ -1,9 +1,6 @@
 """
-Streamlit dashboard for the Wikipedia scraper — pick an extraction mode
-(table, infobox, or heading-filtered list), enter an article URL, and
-browse whatever comes back.
-
-Run with:  streamlit run dashboard.py
+Dashboard view: pick an extraction mode (table, infobox, or heading-filtered
+list), enter an article URL, and browse whatever comes back.
 """
 
 import re
@@ -120,9 +117,8 @@ def render_results(df: pd.DataFrame, article_url: str) -> None:
     st.dataframe(display_df.dropna(axis=1, how="all"), hide_index=True)
 
 
-def main() -> None:
-    """Draw the whole page, top to bottom."""
-    st.set_page_config(page_title="Wikipedia Data Scraper Dashboard", layout="wide")
+def render() -> None:
+    """Draw the dashboard view, top to bottom."""
     st.title("Wikipedia Data Scraper Dashboard")
 
     article_url, mode, heading_pattern = collect_inputs()
@@ -131,7 +127,3 @@ def main() -> None:
         handle_scrape_request(article_url, mode, heading_pattern)
 
     render_results(get_dataframe(DB_PATH), article_url)
-
-
-if __name__ == "__main__":
-    main()
